@@ -1,0 +1,72 @@
+.home{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.priority-indicator {
+  color: red;
+  font-size: 16px;
+  margin-left: 5px;
+}
+
+.create_form input{
+  width:300px;
+  padding:10px;
+  border-bottom:2px solid;
+  outline: none;
+}
+
+.create_form button{
+  padding:10px;
+  background-color: #124E50;
+  color: white;
+  cursor:pointer;
+}
+
+.task{
+  display: inline-block; /*flex*/
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 50%;
+  justify-content: space-between;
+  background-color:#FF8A5B ;
+  color: white; 
+  
+  padding: 2px 5px 2px 5px;
+  margin-top: 2px;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+
+
+.checkbox{
+  display:flex;
+  align-items: center;
+  
+}
+
+.line_through{
+  text-decoration: line-through;
+}
+
+.checkbox.icon{
+  margin-right:5px;
+  font-size: 15px;
+}
+
+.task div span {
+  margin: 0px 5px 0px 4px;
+}
+
+.task div .icon{
+  cursor:pointer;
+}
+
+.block {
+  display: 'block';
+}
+
+
+/* coral = #FF8A5B    |   apricot = #FEBA9D     |   white = #FFFFFF       |    greenblue = #124E50  */
