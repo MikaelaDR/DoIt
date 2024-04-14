@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker' //to have pop-up calendar
 import "react-datepicker/dist/react-datepicker.css";
 import TimePicker from 'react-time-picker';
 
-function Create () {
+function EditTask () {
     const [task, setTask] = useState()
     const [description, setDescription] = useState()
     const [category, setCategory] = useState()
@@ -15,9 +15,8 @@ function Create () {
 
     //Passes task data to server side of app
     const handleAdd = () =>{
-        
         axios.post('http://localhost:7000/add', 
-        {task:task, description:description, category:category, dueDate:dueDate, start: start, end: end,  isHighPriority: isHighPriority,})
+        {task:task, description:description, category:category, dueDate:dueDate, start: start, end: end,  isComplete:isComplete, isHighPriority: isHighPriority})
         .then(result=> {
             location.reload()
         })
@@ -25,7 +24,8 @@ function Create () {
     }
 
     return(
-        <div>
+        <div style={{width:'50%', alignContent:'center', backgroundColor:'#FFF1EB', padding:30, borderRadius:10, border:'2px solid #124E50'}}>
+            <h1>EDIT DO IT TASK</h1>
 
             {/* Task Title */}
             <div style={{display:'flex', justifyContent:'center'}}>
@@ -70,7 +70,6 @@ function Create () {
             {/* Due date Picker */}
             <div className='create_form' style={{display:'flex', justifyContent:'center'}}>
             <DatePicker 
-                
                 placeholderText="Select Due Date" 
                 selected={dueDate} 
                 onChange={(date) => setDueDate(date)}
@@ -147,15 +146,17 @@ function Create () {
                 >High Priority</label>
             </div>
 
+            
+
             {/* Add Button */}
             <div className='create_form' style={{display:'flex', justifyContent:'center', marginTop: '40px', marginBottom:'50px'}}>
                 <button style={{width:'200px'}} type="buton" onClick={handleAdd}>Add</button>
             </div>
+
 
         </div>
         
     )
 }
 
-export default Create
-
+export default EditTask

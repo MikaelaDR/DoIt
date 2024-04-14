@@ -28,14 +28,15 @@ const todoSchema = new mongoose.Schema(
             default: 'none',
             required: true,
         }, 
-        done:{
+        isComplete:{
             type: Boolean,
             default: false,
         },
         isHighPriority:{
             type: Boolean,
             default: false,
-        }
+        },
+        
     },
     {
         timestamps: true,

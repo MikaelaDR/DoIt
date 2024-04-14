@@ -2,19 +2,25 @@
   display:flex;
   flex-direction: column;
   align-items: center;
+  background-color: #FFF1EB;
+  
 }
 
 .priority-indicator {
   color: red;
   font-size: 16px;
   margin-left: 5px;
+  
 }
 
 .create_form input{
-  width:300px;
+  width:350px;
   padding:10px;
-  border-bottom:2px solid;
+  border-bottom:2px solid #124E50 ;
+  border-radius: 5px;
   outline: none;
+  font-size: larger;
+
 }
 
 .create_form button{
@@ -28,15 +34,16 @@
   display: inline-block; /*flex*/
   flex-direction: row;
   justify-content: flex-start;
-  align-items: center;
+  /* align-items: center; */
   width: 50%;
-  justify-content: space-between;
-  background-color:#FF8A5B ;
-  color: white; 
-  
-  padding: 2px 5px 2px 5px;
+  background-color:#FEBA9D  ;
+  color: black; 
+  /* border: 4px #EF9F7C solid; */
+  border-radius: 20px;
+  padding: 20px;
   margin-top: 2px;
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  
 }
 
 
@@ -44,6 +51,9 @@
 .checkbox{
   display:flex;
   align-items: center;
+  background-color: #124E50;
+  justify-content: flex-start;
+  border-radius: 10px;
   
 }
 
@@ -54,10 +64,12 @@
 .checkbox.icon{
   margin-right:5px;
   font-size: 15px;
+  display:flex;
 }
 
 .task div span {
   margin: 0px 5px 0px 4px;
+  
 }
 
 .task div .icon{
@@ -68,5 +80,16 @@
   display: 'block';
 }
 
+/* Checkbox High Priority Styling */
+input[type=checkbox]{
+  accent-color:  #1E8285 ;
+  height: 25px;
+  width:30px;
+  background-color: grey;
+}
 
-/* coral = #FF8A5B    |   apricot = #FEBA9D     |   white = #FFFFFF       |    greenblue = #124E50  */
+
+
+
+
+/* coral = #FF8A5B | teal = #1E8285   |   apricot = #FEBA9D     |   white = #FFFFFF       |    greenblue = #124E50  */

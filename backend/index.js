@@ -30,7 +30,7 @@ app.get('/get', (req, res) =>{
 
 //Add Todo
 app.post('/add', (req, res) =>{
-    const { task, description, category, start, end, dueDate, isHighPriority, done } = req.body; //Request body destructured
+    const { task, description, category, start, end, dueDate, isHighPriority, isComplete } = req.body; //Request body destructured
    
     todoModel.create({
         task: task,
@@ -39,7 +39,7 @@ app.post('/add', (req, res) =>{
         end: end,
         dueDate: dueDate,
         category: category,
-        done: done,
+        isComplete: isComplete,
         isHighPriority: isHighPriority,
 
     }).then(result => {
@@ -50,17 +50,17 @@ app.post('/add', (req, res) =>{
         // Modify result to include high priority flag
         const todos = tasks.map(todo => ({
             ...todo._doc,
-            highPriority: todo.isHighPriority ? true : false // Add high priority indicator
+            isHighPriority: todo.isHighPriority ? true : false // Add high priority indicator
         }));
         res.json(todos);
     })
     .catch(err => res.json(err));
 });
 
-//Edit Todo
+//Update Todo As Complete
 app.put('/update/:id', (req, res) => {
     const {id} = req.params;
-    todoModel.findByIdAndUpdate({_id: id}, {done:true})
+    todoModel.findByIdAndUpdate({_id: id}, {isComplete:true})
     .then(result=> res.json(result))
     .catch(err => res.json(err))
 })
@@ -71,6 +71,39 @@ app.delete('/delete/:id', (req, res) => {
     todoModel.findByIdAndDelete({_id: id})
     .then(result=> res.json(result))
     .catch(err => res.json(err))
+})
+
+//Edit Todo
+app.put('/edit/:id', (req, res) =>{
+    try {
+        if(
+            request.body.task ||
+            request.body.description ||
+            request.body.category ||
+            request.body.start ||
+            request.body.end ||
+            request.body.dueDate ||
+            request.body.isHighPriority
+        ){
+            return res.status(400).send({
+                message: 'Send all required fields: task, description, category, dueDate...'
+            });
+        }
+
+        const {id} = req.params;
+
+        const result = todoModel.findByIdAndUpdate({_id: id}, request.body)
+        
+        if(!result){
+            return response.status(400).send({
+                message: 'Book not found',
+            });
+        }
+    }catch (error){
+        console.log(error.message);
+        response.status(500).send({message:error.message});
+    }
+
 })
 
 
