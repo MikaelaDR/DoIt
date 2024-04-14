@@ -1,162 +1,83 @@
-import React, {useState} from 'react'
-import axios from 'axios'
-import DatePicker from 'react-datepicker' //to have pop-up calendar
-import "react-datepicker/dist/react-datepicker.css";
-import TimePicker from 'react-time-picker';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
+import './EditTask.css';
 
-function EditTask () {
-    const [task, setTask] = useState()
-    const [description, setDescription] = useState()
-    const [category, setCategory] = useState()
-    const [start, setStart] = useState(new Date())
-    const [end, setEnd] = useState(new Date())
-    const [dueDate, setDueDate] = useState(new Date())
-    const [isHighPriority, setHighPriority] = useState(false); // New state for high priority checkbox
+function EditTask() {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [task, setTask] = useState('');
+    const [description, setDescription] = useState('');
+    const [category, setCategory] = useState('');
+    const [dueDate, setDueDate] = useState('');
+    const [start, setStart] = useState('');
+    const [end, setEnd] = useState('');
+    const [isHighPriority, setIsHighPriority] = useState(false);
+    const [isComplete, setIsComplete] = useState(false);
 
-    //Passes task data to server side of app
-    const handleAdd = () =>{
-        axios.post('http://localhost:7000/add', 
-        {task:task, description:description, category:category, dueDate:dueDate, start: start, end: end,  isComplete:isComplete, isHighPriority: isHighPriority})
-        .then(result=> {
-            location.reload()
+    // Fetch task details when component mounts
+    useEffect(() => {
+        axios.get(`http://localhost:7000/get/${id}`)
+            .then(response => {
+                const { task, description, category, dueDate, isHighPriority, isComplete } = response.data;
+                setTask(task);
+                setDescription(description);
+                setCategory(category);
+                setDueDate(dueDate);
+                setIsHighPriority(isHighPriority);
+                setIsComplete(isComplete);
+            })
+            .catch(error => console.error('Error fetching task:', error));
+    }, [id]);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        axios.put(`http://localhost:7000/edit/${id}`, {
+            task,
+            description,
+            category,
+            start,
+            end,
+            dueDate,
+            isHighPriority,
+            isComplete
         })
-        .catch(err=> console.log(err))
-    }
+        .then(() => navigate('/'))
+        .catch(error => console.error('Error updating task:', error));
+    };
 
-    return(
-        <div style={{width:'50%', alignContent:'center', backgroundColor:'#FFF1EB', padding:30, borderRadius:10, border:'2px solid #124E50'}}>
-            <h1>EDIT DO IT TASK</h1>
-
-            {/* Task Title */}
-            <div style={{display:'flex', justifyContent:'center'}}>
-                <input
-                style={{
-                    padding:'10px',
-                    width:'100%',
-                    border:'2px solid #124E50',
-                    borderRadius: '5px',
-                    outline: 'none',
-                    fontSize: 'larger',
-                    fontFamily:'Franklin Gothic Medium, Arial Narrow, Arial, sans-serif',
-                }}
-                    type="text" 
-                    placeholder='Enter Task' 
-                    onChange={(e)=> setTask(e.target.value)}/>
-            </div>
-
-            {/* Description */}
-            <div style={{
-                display:'flex', 
-                justifyContent:'center',
-                
-                }}>
-                <textarea 
-                    style={{width:'100%',
-                        padding:'10px',
-                        border:'2px solid #124E50',
-                        borderRadius: '5px',
-                        outline: 'none',
-                        fontSize: 'larger',
-                        fontFamily:'Franklin Gothic Medium, Arial Narrow, Arial, sans-serif',
-                    }}
-                    type="text" 
-                    placeholder='Enter Description' 
-                    onChange={(e)=> setDescription(e.target.value)}
-                    rows={5}
-                    
-                />
-            </div>
-
-            {/* Due date Picker */}
-            <div className='create_form' style={{display:'flex', justifyContent:'center'}}>
-            <DatePicker 
-                placeholderText="Select Due Date" 
-                selected={dueDate} 
-                onChange={(date) => setDueDate(date)}
-                showIcon
-                isClearable
-                closeOnScroll={true}
-            />
-            </div>
-
-            {/* Category Selection */}
-            <div style={{display:'flex', justifyContent:'center'}}>
-                <select 
-                    style ={{ 
-                        width:'100%',
-                        padding:'10px',
-                        border:'2px solid #124E50',
-                        borderRadius: '5px',
-                        outline: 'none',
-                        fontSize: 'larger',
-                        fontFamily:'Franklin Gothic Medium, Arial Narrow, Arial, sans-serif',
-                        backgroundColor:'#1E8285'
-                    }} 
-                    value={category} 
-                    onChange={(e)=> setCategory(e.target.value
-                )}>
-                    <option disable selected value> -- Choose Category --</option>
-                    <option value = "">None</option>
-                    <option value = "work">Work</option>
-                    <option value = "personal">Personal</option>
-                    <option value = "school">School</option>
-                    <option value = "home">Home</option>
-                </select> 
-                
-            </div>
-
-            
-            
-            {/* Time Pickers for Start time and End time */}
-            {/* <div >
-                <TimePicker
-                    style={{backgroundColor:'black'}}
-                    value={start}
-                    onChange={(time) => setStart(time)}
-                    //format='hh:mm a'
-                />
-                
-                <TimePicker
-                    style={{padding:'30px'}}
-                    value={end}
-                    onChange={(time) => setEnd(time)}
-                />
-            </div> */}
-
-            {/* Checkbox for high priority */}
-            <div style={{
-                display:'flex', 
-                justifyContent:'center',
-                marginTop:'20px'
-            }}>
-                <input
-                type="checkbox"
-                checked={isHighPriority}
-                onChange={(e) => setHighPriority(e.target.checked)}
-                />
-
-                <label
-                    style={{
-                        padding:'10px',
-                        borderRadius: '5px',
-                        // outline: 'none',
-                        fontSize: 'larger',
-                        fontFamily:'Franklin Gothic Medium, Arial Narrow, Arial, sans-serif',
-                    }}
-                >High Priority</label>
-            </div>
-
-            
-
-            {/* Add Button */}
-            <div className='create_form' style={{display:'flex', justifyContent:'center', marginTop: '40px', marginBottom:'50px'}}>
-                <button style={{width:'200px'}} type="buton" onClick={handleAdd}>Add</button>
-            </div>
-
-
+    return (
+        <div className="edit-task-container">
+            <h1>Edit Task</h1>
+            <form onSubmit={handleSubmit} className="form">
+                <label className="label" style={{color:'#1E8285', textShadow:'2px 2px #FFF1EB', fontSize:20}}>
+                    Task:
+                    <input className="input" type="text" value={task} onChange={(e) => setTask(e.target.value)} />
+                </label>
+                <label className="label" style={{color:'#1E8285', textShadow:'2px 2px #FFF1EB', fontSize:20}}>
+                    Description:
+                    <input className="input" type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
+                </label>
+                <label className="label" style={{color:'#1E8285', textShadow:'2px 2px #FFF1EB', fontSize:20}}>
+                    Category:
+                    <input className="input" type="text" value={category} onChange={(e) => setCategory(e.target.value)} />
+                </label>
+                <label className="label" style={{color:'#1E8285', textShadow:'2px 2px #FFF1EB', fontSize:20}}>
+                    Due Date:
+                    <input className="input" type="text" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+                </label>
+                <label className="checkbox-label">
+                    High Priority:
+                    <input type="checkbox" checked={isHighPriority} onChange={(e) => setIsHighPriority(e.target.checked)} />
+                </label>
+                <label className="checkbox-label">
+                    Complete:
+                    <input type="checkbox" checked={isComplete} onChange={(e) => setIsComplete(e.target.checked)} />
+                </label>
+                <button type="submit" className="button">Update Task</button>
+            </form>
         </div>
-        
-    )
+    );
 }
 
-export default EditTask
+export default EditTask;

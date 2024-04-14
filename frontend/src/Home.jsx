@@ -167,10 +167,11 @@ function Home () {
 
                             {/* Edit and Delete Icons */}
                             <div style={{display:'flex', justifyContent:'flex-end'}}> 
-                                <Link style={{color:'white'}} to="/edit/id:">
+                                <Link style={{color:'white'}} to={"/edit/" + todo._id}>
                                 <span><FaEdit className='icon'
                                     onClick={() => handleEdit(todo._id)} /></span>
                                 </Link>
+                                
                                 <span style={{color:'white'}}><BsFillTrashFill className='icon'
                                     onClick={() => handleDelete(todo._id)} /></span> 
                             </div>

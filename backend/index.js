@@ -73,39 +73,55 @@ app.delete('/delete/:id', (req, res) => {
     .catch(err => res.json(err))
 })
 
+//Get route for editing 
+app.get('/get/:id', (req, res) => {
+    const { id } = req.params;
+    todoModel.findById(id)
+      .then(task => {
+        if (!task) {
+          return res.status(404).json({ message: "Task not found" });
+        }
+        res.json(task);
+      })
+      .catch(err => {
+        console.error("Error fetching task:", err);
+        res.status(500).json({ message: "Error fetching task", error: err });
+      });
+  });
+
 //Edit Todo
-app.put('/edit/:id', (req, res) =>{
-    try {
-        if(
-            request.body.task ||
-            request.body.description ||
-            request.body.category ||
-            request.body.start ||
-            request.body.end ||
-            request.body.dueDate ||
-            request.body.isHighPriority
-        ){
-            return res.status(400).send({
-                message: 'Send all required fields: task, description, category, dueDate...'
-            });
-        }
+app.put('/edit/:id', (req, res) => {
+    const { id } = req.params;
+    console.log("Request body:", req.body); // This will show what data is actually coming in
+    console.log("Backend received ID:", id);  // Ensure 'id' is logged correctly
 
-        const {id} = req.params;
+    const { task, description, category, start, end, dueDate, isHighPriority, isComplete } = req.body;
 
-        const result = todoModel.findByIdAndUpdate({_id: id}, request.body)
-        
-        if(!result){
-            return response.status(400).send({
-                message: 'Book not found',
-            });
-        }
-    }catch (error){
-        console.log(error.message);
-        response.status(500).send({message:error.message});
+    if (!task) {
+        return res.status(400).json({ error: "Task field is required" });
     }
 
-})
-
+    todoModel.findByIdAndUpdate({_id: id}, {
+        task,
+        description,
+        start,
+        end,
+        dueDate,
+        category,
+        isComplete,
+        isHighPriority,
+    }, { new: true })
+    .then(result => {
+        if (!result) {
+            return res.status(404).json({ message: "Task not found" });
+        }
+        res.json(result);
+    })
+    .catch(err => {
+        console.error("Update error:", err);
+        res.status(500).json(err);
+    });
+});
 
 
 //---------------------PORT DEFINITION & SERVER SET UP------------------
