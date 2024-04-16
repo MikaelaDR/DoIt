@@ -91,7 +91,7 @@ function Create () {
                         outline: 'none',
                         fontSize: 'larger',
                         fontFamily:'Franklin Gothic Medium, Arial Narrow, Arial, sans-serif',
-                        backgroundColor:'#1E8285'
+                        backgroundColor:'#ffffff'
                     }} 
                     value={category} 
                     onChange={(e)=> setCategory(e.target.value
@@ -106,7 +106,6 @@ function Create () {
                 
             </div>
 
-            
             
             {/* Time Pickers for Start time and End time */}
             {/* <div >
@@ -149,7 +148,7 @@ function Create () {
 
             {/* Add Button */}
             <div className='create_form' style={{display:'flex', justifyContent:'center', marginTop: '40px', marginBottom:'50px'}}>
-                <button style={{width:'200px'}} type="buton" onClick={handleAdd}>Add</button>
+                <button style={{width:'200px', fontFamily: 'Franklin Gothic Medium'}} type="buton" onClick={handleAdd}>Add</button>
             </div>
 
         </div>

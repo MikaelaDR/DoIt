@@ -7,7 +7,7 @@ import {
   BsFillTrashFill,
 } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
-import logo from "./assets/doitLogo5.png";
+import logo from "./assets/doitLogo6.png";
 import moment from "moment"; //for time format
 import { Link } from "react-router-dom";
 import {
@@ -24,6 +24,7 @@ import {
   PinterestIcon,
   WhatsappIcon,
 } from "react-share";
+import backgroundImage from "./assets/background.jpg";
 
 function Home() {
   const [todos, setTodos] = useState([]);
@@ -80,13 +81,22 @@ function Home() {
       .catch((err) => console.log(err));
   };
 
-
   return (
-    <div className="home">
+    <div
+      className="home"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: "top left",
+        backgroundRepeat: "repeat",
+        width: "100%",
+        height: "100%",
+      }}
+    >
       {/* Share Icons */}
       <div
         style={{
-          backgroundColor: "#FFF1EB",
+          // backgroundColor: "#FFF1EB",
           width: "100%",
           display: "flex",
           justifyContent: "flex-end",
@@ -128,15 +138,16 @@ function Home() {
           </TwitterShareButton>
         </div>
       </div>
-      <img src={logo} alt="Logo" style={{ width: '150px', height: 'auto'}} />;<h2>To do List</h2>
-      
+      <img src={logo} alt="Logo" style={{ width: "200px", height: "auto" }} />
+      <h2>To do List</h2>
+
+
       <div>
-      <Create />
+        <Create />
       </div>
-      
       {/* FILTERING */}
-      <div>
-        <h3>Filter Tasks</h3>
+      <div name="FilteringSection">
+        <h2 style={{ textAlign: 'center'}}>Filter Tasks</h2>
         <div>
           <label>
             Show:
@@ -159,10 +170,12 @@ function Home() {
           </label>
         </div>
       </div>
+
       {todos.length === 0 ? (
         <div>
           <h2>No record</h2>
         </div>
+
       ) : (
         todos
           .filter((todo) => {
@@ -173,6 +186,7 @@ function Home() {
           .filter((todo) => {
             return filterPriority ? todo.isHighPriority : true;
           })
+          
           .map((todo) => (
             <div className="task">
               <div
@@ -258,12 +272,13 @@ function Home() {
                       color: "#1E8285",
                       textShadow: "2px 2px #FFF1EB",
                       fontSize: 20,
+                      textAlign: 'center',
                     }}
                   >
                     Description
                   </p>
                 </div>
-                <p>{todo.description}</p>
+                <p style={{textAlign: 'center'}}>{todo.description}</p>
               </div>
 
               {/* Category */}
@@ -273,12 +288,13 @@ function Home() {
                     color: "#1E8285",
                     textShadow: "2px 2px #FFF1EB",
                     fontSize: 20,
+                    textAlign: 'center',
                   }}
                 >
                   Category
                 </p>
               </div>
-              <p style={{ textTransform: "capitalize" }}> {todo.category}</p>
+              <p style={{ textTransform: "capitalize", textAlign: 'center', }}> {todo.category}</p>
 
               {/* Due Date */}
               <div>
@@ -287,6 +303,7 @@ function Home() {
                     color: "#1E8285",
                     textShadow: "2px 2px #FFF1EB",
                     fontSize: 20,
+                    textAlign: 'center',
                   }}
                 >
                   Due Date
@@ -294,10 +311,7 @@ function Home() {
               </div>
 
               <div>
-                <p>{moment().format("MMM Do YYYY")}</p>
-                {/* <p>Start Time: 
-                                {todo.end}  
-                            </p> */}
+              <p style={{textAlign: 'center'}}>{moment(todo.dueDate).format("MMM Do YYYY")}</p>
               </div>
             </div>
           ))

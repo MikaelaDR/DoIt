@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import "./EditTask.css";
 import DatePicker from "react-datepicker"; //to have pop-up calendar
 import "react-datepicker/dist/react-datepicker.css";
+import backgroundImage from "./assets/background.jpg";
 
 function EditTask() {
   const { id } = useParams();
@@ -58,6 +59,7 @@ function EditTask() {
   };
 
   return (
+    <div className="backgroundStyle">
     <div className="edit-task-container">
       <h1>Edit Task</h1>
       <form onSubmit={handleSubmit} className="form">
@@ -111,8 +113,8 @@ function EditTask() {
               outline: "none",
               fontSize: "larger",
               fontFamily:
-                "Franklin Gothic Medium, Arial Narrow, Arial, sans-serif",
-              backgroundColor: "#1E8285",
+                "Franklin Gothic Medium",
+              backgroundColor: "white",
             }}
             value={category}
             onChange={(e) => setCategory(e.target.value)}
@@ -166,6 +168,7 @@ function EditTask() {
           Update Task
         </button>
       </form>
+    </div>
     </div>
   );
 }
