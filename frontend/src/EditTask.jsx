@@ -13,8 +13,6 @@ function EditTask() {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [dueDate, setDueDate] = useState("");
-  const [start, setStart] = useState("");
-  const [end, setEnd] = useState("");
   const [isHighPriority, setIsHighPriority] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
 
@@ -48,8 +46,6 @@ function EditTask() {
         task,
         description,
         category,
-        start,
-        end,
         dueDate,
         isHighPriority,
         isComplete,

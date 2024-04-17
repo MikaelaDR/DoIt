@@ -8,8 +8,6 @@ function Create () {
     const [task, setTask] = useState()
     const [description, setDescription] = useState()
     const [category, setCategory] = useState()
-    const [start, setStart] = useState(new Date())
-    const [end, setEnd] = useState(new Date())
     const [dueDate, setDueDate] = useState(new Date())
     const [isHighPriority, setHighPriority] = useState(false); // New state for high priority checkbox
 
@@ -17,7 +15,7 @@ function Create () {
     const handleAdd = () =>{
         
         axios.post('http://localhost:7000/add', 
-        {task:task, description:description, category:category, dueDate:dueDate, start: start, end: end,  isHighPriority: isHighPriority,})
+        {task:task, description:description, category:category, dueDate:dueDate, isHighPriority: isHighPriority,})
         .then(result=> {
             location.reload()
         })
@@ -106,22 +104,6 @@ function Create () {
                 
             </div>
 
-            
-            {/* Time Pickers for Start time and End time */}
-            {/* <div >
-                <TimePicker
-                    style={{backgroundColor:'black'}}
-                    value={start}
-                    onChange={(time) => setStart(time)}
-                    //format='hh:mm a'
-                />
-                
-                <TimePicker
-                    style={{padding:'30px'}}
-                    value={end}
-                    onChange={(time) => setEnd(time)}
-                />
-            </div> */}
 
             {/* Checkbox for high priority */}
             <div style={{

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import Create from "./Create";
 import axios from "axios";
 import {
-  BsFillCheckCircleFill,
-  BsCircleFill,
   BsFillTrashFill,
 } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
@@ -28,15 +26,10 @@ import backgroundImage from "./assets/background.jpg";
 
 function Home() {
   const [todos, setTodos] = useState([]);
-  const formatter = new Intl.DateTimeFormat("en-US", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
   const [isComplete, setIsComplete] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all"); // 'all', 'completed', 'incomplete'
   const [filterPriority, setFilterPriority] = useState(false); // true for high priority only, false for all
-  const currentPageUrl = "http://localhost:5173/";
+  const currentPageUrl = "https://github.com/MikaelaDR/DoIt";
 
   useEffect(() => {
     axios
@@ -71,8 +64,6 @@ function Home() {
         description: description,
         category: category,
         dueDate: dueDate,
-        start: start,
-        end: end,
         isHighPriority: isHighPriority,
       })
       .then((result) => {
@@ -96,7 +87,6 @@ function Home() {
       {/* Share Icons */}
       <div
         style={{
-          // backgroundColor: "#FFF1EB",
           width: "100%",
           display: "flex",
           justifyContent: "flex-end",
@@ -194,12 +184,6 @@ function Home() {
                 style={{ justifyContent: "space-between" }}
               >
                 <div className="checkbox" style={{}}>
-                  {/* Fill circle if todo is done
-                            {todo.isComplete? 
-                            <BsFillCheckCircleFill className='icon'/>
-                            :
-                            <BsCircleFill className='icon'/>
-                            } */}
 
                   {/* IsComplete Checkbox */}
                   <div
@@ -212,7 +196,6 @@ function Home() {
                     <input
                       type="checkbox"
                       checked={todo.isComplete}
-                      //onClick={handleIsComplete}
                       onChange={(e) => {
                         setIsComplete(!isComplete);
                         {
@@ -263,10 +246,10 @@ function Home() {
                   </span>
                 </div>
               </div>
-
+            
               <div>
                 {/* Description */}
-                <div>
+                <span>
                   <p
                     style={{
                       color: "#1E8285",
@@ -276,13 +259,18 @@ function Home() {
                     }}
                   >
                     Description
-                  </p>
-                </div>
-                <p style={{textAlign: 'center'}}>{todo.description}</p>
+                  </p><p style={{textAlign: 'center'}}>{todo.description}</p>
+                </span>
+                
               </div>
 
+            <div style={{borderBottom:"3px solid #FF8A5B ", opacity:0.2, width:'100%'}}/>
               {/* Category */}
-              <div>
+              {
+                todo.category ==="none" ? (null):
+                (
+                <div>
+                <div>
                 <p
                   style={{
                     color: "#1E8285",
@@ -295,7 +283,11 @@ function Home() {
                 </p>
               </div>
               <p style={{ textTransform: "capitalize", textAlign: 'center', }}> {todo.category}</p>
-
+            <div style={{borderBottom:"3px solid #FF8A5B ", opacity:0.2, width:'100%'}}/>
+             </div>)
+              }
+              
+                
               {/* Due Date */}
               <div>
                 <p
