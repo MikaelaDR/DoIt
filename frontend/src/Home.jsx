@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Create from "./Create";
 import axios from "axios";
 import {
+  BsFillCheckCircleFill,
+  BsCircleFill,
   BsFillTrashFill,
 } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
@@ -26,10 +28,15 @@ import backgroundImage from "./assets/background.jpg";
 
 function Home() {
   const [todos, setTodos] = useState([]);
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
   const [isComplete, setIsComplete] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all"); // 'all', 'completed', 'incomplete'
   const [filterPriority, setFilterPriority] = useState(false); // true for high priority only, false for all
-  const currentPageUrl = "https://github.com/MikaelaDR/DoIt";
+  const currentPageUrl = "http://localhost:5173/";
 
   useEffect(() => {
     axios
@@ -39,10 +46,11 @@ function Home() {
   }, []);
 
   //Handles loading changes, but is not EDITOR of tasks
-  const handleUpdate = (id) => {
+  const handleUpdate = (id, isComplete) => {
     axios
-      .put("http://localhost:7000/update/" + id)
+      .put("http://localhost:7000/update/" + id, { isComplete })
       .then((result) => {
+        // You might want to update the state instead of reloading the page
         location.reload();
       })
       .catch((err) => console.log(err));
@@ -64,6 +72,8 @@ function Home() {
         description: description,
         category: category,
         dueDate: dueDate,
+        start: start,
+        end: end,
         isHighPriority: isHighPriority,
       })
       .then((result) => {
@@ -77,7 +87,7 @@ function Home() {
       className="home"
       style={{
         backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: 'cover',
+        backgroundSize: "cover",
         backgroundPosition: "top left",
         backgroundRepeat: "repeat",
         width: "100%",
@@ -87,6 +97,7 @@ function Home() {
       {/* Share Icons */}
       <div
         style={{
+          // backgroundColor: "#FFF1EB",
           width: "100%",
           display: "flex",
           justifyContent: "flex-end",
@@ -131,13 +142,12 @@ function Home() {
       <img src={logo} alt="Logo" style={{ width: "200px", height: "auto" }} />
       <h2>To do List</h2>
 
-
       <div>
         <Create />
       </div>
       {/* FILTERING */}
       <div name="FilteringSection">
-        <h2 style={{ textAlign: 'center'}}>Filter Tasks</h2>
+        <h2 style={{ textAlign: "center" }}>Filter Tasks</h2>
         <div>
           <label>
             Show:
@@ -165,7 +175,6 @@ function Home() {
         <div>
           <h2>No record</h2>
         </div>
-
       ) : (
         todos
           .filter((todo) => {
@@ -176,7 +185,7 @@ function Home() {
           .filter((todo) => {
             return filterPriority ? todo.isHighPriority : true;
           })
-          
+
           .map((todo) => (
             <div className="task">
               <div
@@ -184,6 +193,12 @@ function Home() {
                 style={{ justifyContent: "space-between" }}
               >
                 <div className="checkbox" style={{}}>
+                  {/* Fill circle if todo is done
+                            {todo.isComplete? 
+                            <BsFillCheckCircleFill className='icon'/>
+                            :
+                            <BsCircleFill className='icon'/>
+                            } */}
 
                   {/* IsComplete Checkbox */}
                   <div
@@ -197,10 +212,8 @@ function Home() {
                       type="checkbox"
                       checked={todo.isComplete}
                       onChange={(e) => {
-                        setIsComplete(!isComplete);
-                        {
-                          handleUpdate(todo._id);
-                        }
+                        const newCompleteStatus = !todo.isComplete;
+                        handleUpdate(todo._id, newCompleteStatus);
                       }}
                     />
 
@@ -246,48 +259,42 @@ function Home() {
                   </span>
                 </div>
               </div>
-            
+
               <div>
                 {/* Description */}
-                <span>
+                <div>
                   <p
                     style={{
                       color: "#1E8285",
                       textShadow: "2px 2px #FFF1EB",
                       fontSize: 20,
-                      textAlign: 'center',
+                      textAlign: "center",
                     }}
                   >
                     Description
-                  </p><p style={{textAlign: 'center'}}>{todo.description}</p>
-                </span>
-                
+                  </p>
+                </div>
+                <p style={{ textAlign: "center" }}>{todo.description}</p>
               </div>
 
-            <div style={{borderBottom:"3px solid #FF8A5B ", opacity:0.2, width:'100%'}}/>
               {/* Category */}
-              {
-                todo.category ==="none" ? (null):
-                (
-                <div>
-                <div>
+              <div>
                 <p
                   style={{
                     color: "#1E8285",
                     textShadow: "2px 2px #FFF1EB",
                     fontSize: 20,
-                    textAlign: 'center',
+                    textAlign: "center",
                   }}
                 >
                   Category
                 </p>
               </div>
-              <p style={{ textTransform: "capitalize", textAlign: 'center', }}> {todo.category}</p>
-            <div style={{borderBottom:"3px solid #FF8A5B ", opacity:0.2, width:'100%'}}/>
-             </div>)
-              }
-              
-                
+              <p style={{ textTransform: "capitalize", textAlign: "center" }}>
+                {" "}
+                {todo.category}
+              </p>
+
               {/* Due Date */}
               <div>
                 <p
@@ -295,7 +302,7 @@ function Home() {
                     color: "#1E8285",
                     textShadow: "2px 2px #FFF1EB",
                     fontSize: 20,
-                    textAlign: 'center',
+                    textAlign: "center",
                   }}
                 >
                   Due Date
@@ -303,7 +310,9 @@ function Home() {
               </div>
 
               <div>
-              <p style={{textAlign: 'center'}}>{moment(todo.dueDate).format("MMM Do YYYY")}</p>
+                <p style={{ textAlign: "center" }}>
+                  {moment(todo.dueDate).format("MMM Do YYYY")}
+                </p>
               </div>
             </div>
           ))

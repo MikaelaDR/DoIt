@@ -59,11 +59,12 @@ app.post('/add', (req, res) =>{
 
 //Update Todo As Complete
 app.put('/update/:id', (req, res) => {
-    const {id} = req.params;
-    todoModel.findByIdAndUpdate({_id: id}, {isComplete:true})
-    .then(result=> res.json(result))
+    const { isComplete } = req.body; // Get isComplete from the request body
+    const { id } = req.params;
+    todoModel.findByIdAndUpdate({_id: id}, {isComplete}, {new: true})
+    .then(result => res.json(result))
     .catch(err => res.json(err))
-})
+});
 
 //Delete Todo
 app.delete('/delete/:id', (req, res) => {
